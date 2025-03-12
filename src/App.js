@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: false },
+  //   { id: 1, description: "Passports", quantity: 2, packed: false },
+  //   { id: 2, description: "Socks", quantity: 12, packed: false },
 ];
 
 export default function App() {
@@ -33,7 +33,7 @@ export default function App() {
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
       />
-      <Stats />
+      <Stats items={items} />
     </div>
   );
 }
@@ -114,10 +114,24 @@ function Item({ item, onDeleteItem, onToggleItem }) {
   );
 }
 
-function Stats() {
+function Stats({ items }) {
+  if (!items.length)
+    return (
+      <em>
+        <p className="stats">Start adding some items 🚀</p>
+      </em>
+    );
+
+  const numItems = items.length;
+  const numPackedItems = items.filter((item) => item.packed).length;
+  const percentage = Math.round((numPackedItems / numItems) * 100);
   return (
     <footer className="stats">
-      <em>You have X items on ur list, u already packed y (x%)</em>
+      <em>
+        {percentage === 100
+          ? "Ready to go ✈"
+          : `You have ${numItems} items on ur list, u already packed ${numPackedItems}(${percentage}%)`}
+      </em>
     </footer>
   );
 }
